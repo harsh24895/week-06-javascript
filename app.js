@@ -3,14 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose=require('mongoose');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://admin:test@cluster0-9iex3.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true})
 
-mongoose.connect('mongodb+srv://admin:admin@cluster0-9iex3.mongodb.net/test?retryWrites=true&w=majority',{useNewUrlParser: true,useUnifiedTopology:true});
 
-var db=mongoose.connection;
-db.on('error',()=>console.log('There is an error in MongoDB'));
-db.once('open',()=>console.log('we have connected to mongodb'));
 
+
+var db = mongoose.connection;
+db.on('error', () => console.log("There is an error in connection"));
+db.once('open', () => console.log("we have connected to mongoose"));
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
