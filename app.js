@@ -12,6 +12,8 @@ mongoose.connect('mongodb+srv://admin:test@cluster0-9iex3.mongodb.net/test?retry
 var db = mongoose.connection;
 db.on('error', () => console.log("There is an error in connection"));
 db.once('open', () => console.log("we have connected to mongoose"));
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 

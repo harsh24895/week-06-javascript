@@ -1,9 +1,9 @@
 const mongoose =require("mongoose");
 const Schema=mongoose.Schema;
 
-const article= new Schema({
+const articleSchema= new Schema({
     title:{
-        type:String,
+        type: String,
         required:true,
 
     },
@@ -14,6 +14,7 @@ const article= new Schema({
         default:Date.now
     }
 });
+//create a model based on the above schema
+const article = mongoose.model('Article',articleSchema);
 
-const article=mongoose.model('Article',article);
 module.exports=article;

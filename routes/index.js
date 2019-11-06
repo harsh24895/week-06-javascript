@@ -6,9 +6,11 @@ var Article = require('../models/article');
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
- Article.find().then(articles => {
-   res.json(articles);
- });
+//  Article.find().then(articles => {
+//    res.json(articles);
+//  });
+
+    res.render('index',{title: 'Donee'});
 });
 
 module.exports = router;
