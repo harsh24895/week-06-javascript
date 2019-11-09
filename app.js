@@ -3,7 +3,11 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session'); //this is for session only
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local');
+var User = require('./models/user');
 mongoose.connect('mongodb+srv://admin:test@cluster0-9iex3.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true})
 
 
@@ -28,6 +32,43 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+//after static folder, it will initial in our session
+//also it needs before our router
+app.use(session({ 
+secret: 'unicorn', 
+resave: false, 
+saveUninitialized: true 
+}));
+
+// Init passport for auth. and this must be done after using the session
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+app.post('/login',
+  passport.authenticate('local', { 
+    failureRedirect: '/login', 
+    successRedirect: '/' })
+ 
+  );
+
+
+app.get('/login',(req, res)=>res.send('This is messsgae'));
+
+app.use((req, res, next)=> {
+  // if (!req.session.test) req.session.test = 1;
+  // else req.session.test += 1;
+  // req.session.test = 1;
+  console.log(`REQ.USER: ${req.user}`);
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/articles', articlesRouter);
